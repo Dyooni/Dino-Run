@@ -28,8 +28,9 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !isJump) {
             rigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             anim.SetBool("isJump", true);
-            sfxPlayer.clip = sfxClip[0];
-            sfxPlayer.Play();
+            //sfxPlayer.clip = sfxClip[0];
+            //sfxPlayer.Play();
+            sfxPlayer.PlayOneShot(sfxClip[0]);
             isJump = true;
         }
     }
@@ -38,9 +39,15 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.tag == "Floor" && isJump) {
             anim.SetBool("isJump", false);
-            sfxPlayer.clip = sfxClip[1];
-            sfxPlayer.Play();
+            //sfxPlayer.clip = sfxClip[1];
+            //sfxPlayer.Play();
+            sfxPlayer.PlayOneShot(sfxClip[1]);
             isJump = false;
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Die");
     }
 }
