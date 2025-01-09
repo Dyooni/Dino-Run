@@ -5,10 +5,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     float gameTime;
-    float addTime = 5;
+    public float timeMultiplier = 5;
     public int gameScore;
-
-    public Cactus[] cactus;
 
     void Awake()
     {
@@ -17,7 +15,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        gameTime = gameTime + addTime * Time.deltaTime;
+        gameTime += timeMultiplier * Time.deltaTime;
+        //gameTime = gameTime + timeMultiplier * Time.deltaTime;
         gameScore = Mathf.FloorToInt(gameTime);
     }
 }

@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour
 {
     int gameScore;
-    int nextCheck = 100;
-    bool isAnim = false;
+    int nextMilestone = 100;
+    bool isAnimating = false;
 
     Text scoreText;
     Animator anim;
@@ -18,13 +18,13 @@ public class Score : MonoBehaviour
 
     void Update()
     {
-        scoreText.text = string.Format("{0:D4}", gameScore);        
+        scoreText.text = gameScore.ToString("D4");
 
-        if (gameScore == nextCheck) {
-            gameScore = nextCheck;
-            if (!isAnim) {
+        if (gameScore == nextMilestone) {
+            gameScore = nextMilestone;
+            if (!isAnimating) {
                 anim.SetTrigger("doCheck");
-                isAnim = true;
+                isAnimating = true;
             }
         }
         else
@@ -33,7 +33,7 @@ public class Score : MonoBehaviour
 
     public void Checking()
     {
-        nextCheck += 100;
-        isAnim = false;
+        nextMilestone += 100;
+        isAnimating = false;
     }
 }
