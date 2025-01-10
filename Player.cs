@@ -3,7 +3,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float jumpForce;
-    bool isJump = false;
+    public bool isJump = false;
+    public bool isLive = true;
 
     public AudioClip[] sfxClip;
     AudioSource sfxPlayer;
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
 
     void HandleJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isJump) {
+        if (Input.GetKeyDown(KeyCode.Space) && !isJump && isLive && GameManager.instance.gameScore >= 1) {
             PerformJump();
             //rigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             //anim.SetBool("isJump", true);
@@ -46,7 +47,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Floor") && isJump) {
+        if (other.gameObject.CompareTag("Floor") && isJump && isLive) {
             HandleLanding();
             //anim.SetBool("isJump", false);
             //sfxPlayer.clip = sfxClip[1];
@@ -65,6 +66,14 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Die");
+        PlayerDie();
+    }
+
+    void PlayerDie()
+    {
+        anim.SetTrigger("doDie");
+        sfxPlayer.PlayOneShot(sfxClip[2]);
+        rigid.simulated = false;
+        isLive = false;
     }
 }

@@ -5,7 +5,9 @@ public class Scrolling : MonoBehaviour
     public float speed;
 
 
-    void FixedUpdate() {
-        transform.Translate(Vector3.left * speed * Time.fixedDeltaTime);
+    void FixedUpdate()
+    {
+        if (GameManager.instance.player.isLive)
+            transform.Translate(Vector3.left * speed * Time.fixedDeltaTime);
     }
 }
