@@ -9,12 +9,25 @@ public class HiScore : MonoBehaviour
 
     void Awake()
     {
-        highScoreText = GetComponent<Text>();    
+        highScoreText = GetComponent<Text>();
+        LoadHighScore();
     }
 
-    void Start()
+    void LoadHighScore()
     {
-        highScore = PlayerPrefs.GetInt("HighScore");
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
+        UpdateUI();
+    }
+
+    public void UpdateHighScore(int newScore)
+    {
+        highScore = newScore;
+        PlayerPrefs.SetInt("HighScore", highScore);
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
         highScoreText.text = highScore.ToString("D4");
     }
 }

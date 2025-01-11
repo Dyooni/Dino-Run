@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
 
     void HandleJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isJump && isLive && GameManager.instance.gameScore >= 1) {
+        if (GameKey() && !isJump && isLive && GameManager.instance.gameScore >= 1) {
             PerformJump();
             //rigid.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             //anim.SetBool("isJump", true);
@@ -35,6 +35,11 @@ public class Player : MonoBehaviour
             //sfxPlayer.PlayOneShot(sfxClip[0]);
             //isJump = true;
         }
+    }
+
+    bool GameKey()
+    {
+        return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse1);
     }
 
     void PerformJump()

@@ -13,9 +13,7 @@ public class GameManager : MonoBehaviour
     float gameTime;
     public float timeMultiplier = 5;
     public int gameScore;
-    public bool gameOverNow;
     bool isAudioPlaying = false;
-    float increaseSpeed;
 
     void Awake()
     {
@@ -25,22 +23,30 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Scoring();
-        HighScoreUpdate();
-        LevelUp();
-
-        if (!player.isLive && !gameOverNow) {
-            gameOverUI.SetActive(true);
-            gameOverNow = true;
+        if (player.isLive) { // 플레이어가 죽었을 때 스코어링과 레벨업 호출을 막기 위한 조건문
+            Scoring();
+            LevelUp();
         }
+        else {
+            gameOverUI.SetActive(true);
+            HighScoreUpdate();
+        }
+
+        TurnOffGame();
     }
 
     void Scoring()
     {
         gameTime += timeMultiplier * Time.deltaTime;
         //gameTime = gameTime + timeMultiplier * Time.deltaTime;
-        if (player.isLive)
-            gameScore = Mathf.FloorToInt(gameTime);
+        gameScore = Mathf.FloorToInt(gameTime);
+    }
+
+    void HighScoreUpdate()
+    {
+        if (gameScore > hiScore.highScore) {
+            hiScore.UpdateHighScore(gameScore);
+        }
     }
 
     public void Reset()
@@ -50,7 +56,6 @@ public class GameManager : MonoBehaviour
             isAudioPlaying = true;
         }
         
-        gameOverNow = false;
         Invoke("LoadScene", 1);
     }
 
@@ -59,19 +64,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    void HighScoreUpdate()
-    {
-        if (gameScore > hiScore.highScore && !player.isLive) {
-            PlayerPrefs.SetInt("HighScore", gameScore);
-        }
-    }
-
     void LevelUp()
     {
-        if (player.isLive)
-            increaseSpeed = gameTime / 2000;
-            if (increaseSpeed > 1)
-                increaseSpeed = 1;
-            Time.timeScale = 1 + increaseSpeed;
+        float increaseSpeed = Mathf.Clamp(gameTime / 2000, 0, 1); // Mathf.Clamp 함수를 사용하여 0 ~ 1 범위를 넘지 않도록 설정.
+        Time.timeScale = 1 + increaseSpeed;
+    }
+
+    void TurnOffGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }
     }
 }
